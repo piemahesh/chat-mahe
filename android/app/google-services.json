@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "637188380421",
+    "firebase_url": "https://ocean-students-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "ocean-students",
+    "storage_bucket": "ocean-students.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637188380421:android:4d0d72faab7e3383e7096c",
+        "android_client_info": {
+          "package_name": "com.mahesh.flutter_my_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "637188380421-qes826ncc4rh87ol0j87oa05buid0c3a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mahesh.flutter_my_app",
+            "certificate_hash": "615cc20a9baa87565c067c967aeaa79f16faea2a"
+          }
+        },
+        {
+          "client_id": "637188380421-kcobo43vojjsargnrtj113irnsq29ll4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC12jbyivJcPrTxmhV4EU_0gz2M7BxdwWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "637188380421-kcobo43vojjsargnrtj113irnsq29ll4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
