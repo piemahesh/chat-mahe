@@ -38,7 +38,10 @@ dependencies:
   firebase_storage: ^11.0.10
   firebase_database:
   hive: ^2.2.3
+  uuid: ^4.0.0
   json_annotation: ^4.8.0
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.5
   hive_flutter: ^1.1.0      # Flutter adapter for Hive
   crypto: ^3.0.2           # For SHA256 hashing (encryption key derivation)
 

@@ -1,4 +1,3 @@
-// lib/features/chat/models/message_model.dart
 import 'package:hive/hive.dart';
 
 part 'message_model.g.dart';
@@ -27,4 +26,26 @@ class MessageModel extends HiveObject {
     required this.content,
     required this.timestamp,
   });
+
+  // Factory constructor to create instance from JSON map
+  factory MessageModel.fromJson(Map<String, dynamic> json) {
+    return MessageModel(
+      id: json['id'] as String,
+      senderId: json['senderId'] as String,
+      receiverId: json['receiverId'] as String,
+      content: json['content'] as String,
+      timestamp: DateTime.fromMillisecondsSinceEpoch(json['timestamp'] as int),
+    );
+  }
+
+  // Convert instance to JSON map
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'senderId': senderId,
+      'receiverId': receiverId,
+      'content': content,
+      'timestamp': timestamp.millisecondsSinceEpoch,
+    };
+  }
 }

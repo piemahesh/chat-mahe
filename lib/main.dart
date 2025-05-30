@@ -1,47 +1,72 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_my_app/config/index.dart';
+import 'package:flutter_my_app/core/constants/app_strings.dart';
+import 'package:flutter_my_app/core/services/hive_service.dart';
 import 'package:flutter_my_app/data/models/index.dart';
+import 'package:flutter_my_app/data/repositories/chat_repository.dart';
+import 'package:flutter_my_app/features/chat/bloc/chat_bloc.dart';
+import 'package:flutter_my_app/features/user/bloc/user_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
-import 'core/constants/app_strings.dart'; // your constants
 
 void main() async {
-  debugPrint("hello world");
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
-  // Initialize Hive
   await Hive.initFlutter();
 
-  // Generate a 256-bit encryption key from a secure passphrase
-  final passphrase =
-      AppStrings
-          .hiveEncryptionKey; // Store this securely (e.g. from secure storage)
-  final key = sha256.convert(utf8.encode(passphrase)).bytes;
-
-  // Open an encrypted box for storing messages locally
-  // await Hive.openBox('messagesBox', encryptionCipher: HiveAesCipher(key));
-  // Register adapter if you have a Hive TypeAdapter (optional here)
+  // Register Hive adapter
   Hive.registerAdapter(MessageModelAdapter());
 
-  // Open encrypted box for messages
+  // Encryption key
+  final passphrase = AppStrings.hiveEncryptionKey;
+  final key = sha256.convert(utf8.encode(passphrase)).bytes;
+
+  // Open Hive box
   await Hive.openBox<MessageModel>(
     'messagesBox',
     encryptionCipher: HiveAesCipher(key),
   );
 
-  runApp(const MyApp());
+  // Setup services
+  final hiveService = HiveService();
+  final chatRepository = ChatRepository(hiveService: hiveService);
+
+  runApp(MyApp(hiveService: hiveService, chatRepository: chatRepository));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final HiveService hiveService;
+  final ChatRepository chatRepository;
+
+  const MyApp({
+    super.key,
+    required this.hiveService,
+    required this.chatRepository,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: appRouter, // <-- Use GoRouter instance here
-      debugShowCheckedModeBanner: false,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<UserBloc>(
+          create: (_) => UserBloc()..add(CheckAuthStatusEvent()),
+        ),
+        BlocProvider<ChatBloc>(
+          create:
+              (_) =>
+                  ChatBloc(chatRepository: chatRepository)
+                    ..add(LoadMessagesFromLocalEvent()),
+        ),
+      ],
+      child: MaterialApp.router(
+        routerConfig: appRouter,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
