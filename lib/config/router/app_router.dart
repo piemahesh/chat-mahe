@@ -17,7 +17,7 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => RegisterScreen(),
     ),
     GoRoute(
-      path: '/home',
+      path: '/',
       name: 'home',
       builder: (context, state) => ChatScreen(),
     ),

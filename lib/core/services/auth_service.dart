@@ -10,15 +10,56 @@ class AuthService {
   User? get currentUser => _firebaseAuth.currentUser;
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
+  // Future<UserCredential?> signInWithGoogle() async {
+  //   try {
+  //     print("sdfl");
+  //     final googleUser = await GoogleSignIn().signIn();
+  //     print("ejlkf;sadjkl");
+  //     if (googleUser == null) return null;
+  //
+  //     final googleAuth = await googleUser.authentication;
+  //     debugPrint("$googleAuth");
+  //     final credential = GoogleAuthProvider.credential(
+  //       idToken: googleAuth.idToken,
+  //       accessToken: googleAuth.accessToken,
+  //     );
+  //
+  //     final userCredential = await _firebaseAuth.signInWithCredential(
+  //       credential,
+  //     );
+  //
+  //     // Save user data to Firestore
+  //     final user = userCredential.user;
+  //     if (user != null) {
+  //       final userDoc = _db.collection('users').doc(user.uid);
+  //
+  //       await userDoc.set({
+  //         'uid': user.uid,
+  //         'email': user.email,
+  //         'displayName': user.displayName,
+  //         'photoURL': user.photoURL,
+  //         'lastLogin': DateTime.now(),
+  //       }, SetOptions(merge: true));
+  //     }
+  //
+  //     return userCredential;
+  //   } catch (e) {
+  //     print(e.toString());
+  //     print('Google Sign-In Error: $e');
+  //     return null;
+  //   }
+  // }
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      print("sdfl");
+      // Ensure previous session is cleared to force account picker
+      await GoogleSignIn().signOut();
+
+      // Start Google Sign-In process
       final googleUser = await GoogleSignIn().signIn();
-      print("ejlkf;sadjkl");
       if (googleUser == null) return null;
 
       final googleAuth = await googleUser.authentication;
-      debugPrint("$googleAuth");
+
       final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
         accessToken: googleAuth.accessToken,
@@ -44,7 +85,6 @@ class AuthService {
 
       return userCredential;
     } catch (e) {
-      print(e.toString());
       print('Google Sign-In Error: $e');
       return null;
     }

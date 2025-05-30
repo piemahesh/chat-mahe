@@ -19,13 +19,11 @@ class LoginScreen extends StatelessWidget {
         );
         try {
           if (context.mounted) {
-            context.go('/home');
+            context.go('/');
           }
         } catch (e) {
           print("Navigation error: $e");
         }
-
-        context.go('/home');
       }
     } catch (e) {
       if (context.mounted) {
